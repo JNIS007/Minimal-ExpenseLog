@@ -1,8 +1,4 @@
-
-
 import 'package:drift/drift.dart';
-import 'package:expenselog/domain/entities/settings.dart';
-
 import '../../data/data_source/local/app_database.dart';
 
 class ExpenseDataEnt {
