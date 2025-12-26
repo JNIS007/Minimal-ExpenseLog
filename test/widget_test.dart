@@ -1,30 +1,34 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:expenselog/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('App launches and shows empty state', (WidgetTester tester) async {
+    // Build the app
     await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify that the app title is displayed
+    expect(find.text('Expense Log'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Verify empty state message is shown when no expenses exist
+    expect(find.text('No expenses yet'), findsOneWidget);
+    expect(find.text('Tap + to add your first expense'), findsOneWidget);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify the FAB (Floating Action Button) is present
+    expect(find.byIcon(Icons.add), findsOneWidget);
+  });
+
+  testWidgets('Navigation drawer opens', (WidgetTester tester) async {
+    // Build the app
+    await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
+
+    // Open the drawer
+    final ScaffoldState state = tester.firstState(find.byType(Scaffold));
+    state.openDrawer();
+    await tester.pumpAndSettle();
+
+    // Verify drawer is open by checking for settings option
+    expect(find.text('Settings'), findsOneWidget);
   });
 }
